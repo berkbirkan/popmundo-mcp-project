@@ -1,0 +1,7 @@
+/node_modules/
+/dist/
+/.source/
+/src/pages.gen.ts
+.env
+.env.*
+.DS_Store
