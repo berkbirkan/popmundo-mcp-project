@@ -1,4 +1,5 @@
 import { defineConfig } from "fumapress";
+import { mcpPlugin } from "@fumapress/ai";
 import { fumadocsMdx } from "fumapress/adapters/mdx";
 import { metaSchema, pageSchema } from "fumapress/adapters/mdx/schema";
 import { defineDocs } from "fumadocs-mdx/macro";
@@ -11,4 +12,4 @@ export default defineConfig({
   content: docs.toFumadocsSource(),
   mode: "default",
   site: { name: "PopMCP", baseUrl: "https://popmundo-mcp.berkbirkan.com" },
-}).adapters(fumadocsMdx());
+}).plugins(mcpPlugin()).adapters(fumadocsMdx());
