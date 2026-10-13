@@ -1,6 +1,6 @@
 # PopMCP içerik aktarım rehberi
 
-Bu proje için Excel, CSV, PDF, Word, Markdown ve benzeri kaynak belgelerden rehber hazırlanırken aşağıdaki kuralları uygula.
+Bu proje için Excel, CSV, PDF, Word, Markdown ve benzeri kaynak belgelerden rehber hazırlanırken aşağıdaki kuralları uygula..
 
 ## Kaynak ve doğruluk
 
