@@ -6,11 +6,12 @@ import { defineDocs } from "fumadocs-mdx/macro";
 import { defineI18n } from "fumadocs-core/i18n";
 import { uiTranslations } from "fumadocs-ui/i18n";
 import { fumapressTranslations } from "fumapress/i18n";
+import { llmsTxt, localeRouting } from "./src/plugins";
 
 const i18n = defineI18n({
   languages: ["tr", "en"],
   defaultLanguage: "tr",
-  hideLocale: "default-locale",
+  hideLocale: "never",
   fallbackLanguage: null,
 });
 const translations = i18n.translations()
@@ -49,4 +50,4 @@ export default defineConfig({
   translations,
   mode: "default",
   site: { name: "PopMCP", baseUrl: "https://popmundo-mcp.berkbirkan.com" },
-}).plugins(mcpPlugin()).adapters(fumadocsMdx());
+}).plugins(mcpPlugin(), localeRouting(), llmsTxt()).adapters(fumadocsMdx());
