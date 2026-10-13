@@ -1,14 +1,114 @@
 ---
 title: PopMCP
-description: Popmundo rehberleri ve dokümantasyonu
+description: Popmundo rehberleri ve bu rehberleri yapay zeka araçlarına MCP ve llms.txt ile bağlama rehberi
 ---
 
-Popmundo dokümantasyonuna hoş geldiniz. Test!
+PopMCP, Popmundo rehberlerini hem bu sitede hem de yapay zeka araçlarının doğrudan okuyabileceği biçimde sunar. Rehberlere iki yoldan erişebilirsiniz:
 
-## Dokümantasyonu keşfet
+- **MCP sunucusu:** Claude, ChatGPT ve kod editörleri gibi MCP destekleyen araçlar rehberlerde arama yapıp sayfaları doğrudan okuyabilir.
+- **llms.txt ve Markdown:** Web'de gezinebilen her yapay zeka aracı sayfa dizinini ve sayfaların Markdown sürümlerini okuyabilir.
 
-- [Başlangıç](/tr/baslangic): Dokümantasyonun nasıl kullanılacağını öğrenin.
-- [Kariyer rehberi](/tr/rehberler/kariyer): Örnek rehber yapısını inceleyin.
-- [Konser rehberi](/tr/rehberler/konserler): Yeni dokümanlar için başlangıç şablonunu görün.
+## Rehberleri keşfet
 
-Rehber sayfaları örnek içeriktir; doğrulanmış oyun bilgileri eklendikçe güncellenecektir.
+- [Başlangıç](/tr/baslangic): Sitenin nasıl kullanılacağını öğrenin.
+- [Tarif rehberi — gerekli malzemeler](/tr/rehberler/tarif-malzemeleri): Üretim alanlarına göre malzeme listeleri.
+- [Eşya işlevleri 2026](/tr/rehberler/esya-islevleri-2026): Eşyaların işlevleri ve kullanım şartları.
+- [English guides](/en): İngilizce müzik rehberleri.
+
+## MCP ile bağlanma
+
+MCP (Model Context Protocol), yapay zeka araçlarının dış kaynaklara standart bir yolla bağlanmasını sağlar. PopMCP sunucusu kimlik doğrulama veya API anahtarı istemez.
+
+| Bilgi | Değer |
+| --- | --- |
+| Sunucu adresi | `https://popmundo-mcp.berkbirkan.com/mcp` |
+| Bağlantı türü | Streamable HTTP |
+| Kimlik doğrulama | Gerekmez |
+
+### Araçlar
+
+| Araç | Ne yapar | Parametreler |
+| --- | --- | --- |
+| `search` | Rehber içeriğinde arama yapar. | `query` (zorunlu), `limit` (isteğe bağlı, 1–100), `locale` (`tr` veya `en`, varsayılan `tr`) |
+| `get_page` | Bir sayfanın tam içeriğini getirir. | `path`, örneğin `/tr/rehberler/tarif-malzemeleri` veya `/en/music/album` |
+| `list_pages` | Tüm sayfaların dizinini getirir. | Yok |
+
+### Claude Code
+
+Terminalde şu komutu çalıştırın:
+
+```sh
+claude mcp add --transport http popmcp https://popmundo-mcp.berkbirkan.com/mcp
+```
+
+Sunucuyu tüm projelerinizde kullanmak için komuta `--scope user` ekleyin. Bağlantıyı `claude mcp get popmcp` ile kontrol edebilirsiniz. Araçlar yeni bir oturumda görünür.
+
+### Claude (web ve masaüstü)
+
+1. **Settings → Connectors** bölümünü açın.
+2. **Add custom connector** seçeneğini seçin.
+3. Ad olarak `PopMCP`, adres olarak `https://popmundo-mcp.berkbirkan.com/mcp` girin.
+
+Team ve Enterprise hesaplarda özel bağlayıcıları kuruluş yöneticisi ekler.
+
+### ChatGPT
+
+ChatGPT ayarlarında geliştirici modunu açın ve yeni bir bağlayıcı (connector) oluştururken sunucu adresi olarak `https://popmundo-mcp.berkbirkan.com/mcp` girin. Kimlik doğrulama türü olarak kimlik doğrulamasız seçeneği seçin. Menü adları hesap türüne ve sürüme göre değişebilir.
+
+### Kod editörleri
+
+Cursor için `~/.cursor/mcp.json` dosyasına ekleyin:
+
+```json
+{
+  "mcpServers": {
+    "popmcp": {
+      "url": "https://popmundo-mcp.berkbirkan.com/mcp"
+    }
+  }
+}
+```
+
+VS Code için proje içindeki `.vscode/mcp.json` dosyasına ekleyin:
+
+```json
+{
+  "servers": {
+    "popmcp": {
+      "type": "http",
+      "url": "https://popmundo-mcp.berkbirkan.com/mcp"
+    }
+  }
+}
+```
+
+Uzak (HTTP) MCP sunucularını destekleyen diğer araçlarda da aynı adresi kullanabilirsiniz.
+
+## llms.txt ve Markdown ile erişim
+
+MCP desteklemeyen bir araç kullanıyorsanız, ona aşağıdaki adreslerden birini verin. Bu dosyalar düz metindir ve yapay zeka araçlarının okuması için hazırlanmıştır.
+
+| Adres | İçerik |
+| --- | --- |
+| [/llms.txt](/llms.txt) | Tüm dillerdeki sayfaların dizini; her sayfanın Markdown bağlantısıyla |
+| [/tr/llms.txt](/tr/llms.txt) | Yalnızca Türkçe sayfaların dizini |
+| [/tr/llms-full.txt](/tr/llms-full.txt) | Tüm Türkçe rehberlerin birleşik içeriği |
+| [/en/llms.txt](/en/llms.txt) | Yalnızca İngilizce sayfaların dizini |
+| [/en/llms-full.txt](/en/llms-full.txt) | Tüm İngilizce rehberlerin birleşik içeriği |
+
+Her sayfanın Markdown sürümünü almak için adresin sonuna `.md` ekleyin. Örneğin `/tr/rehberler/tarif-malzemeleri` sayfasının Markdown sürümü `/tr/rehberler/tarif-malzemeleri.md` adresindedir.
+
+### Adres düzeni
+
+- Türkçe sayfalar `/tr`, İngilizce sayfalar `/en` önekiyle başlar.
+- Her dilin rehberleri ayrı hazırlanır; her sayfanın her dilde karşılığı yoktur.
+
+### Sohbet asistanlarında kullanım
+
+ChatGPT ve Claude gibi sohbet asistanları, web'de genellikle yalnızca sizin mesajda yazdığınız veya arama sonuçlarında çıkan adresleri açar. Bu nedenle adresi mesajınıza tam olarak yazın:
+
+```text
+https://popmundo-mcp.berkbirkan.com/llms.txt adresini oku ve pastacılık malzemelerini listele.
+```
+
+Asistan siteye erişemediğini söylerse MCP bağlantısını kullanın.

@@ -1,10 +1,116 @@
 ---
 title: PopMCP
-description: Popmundo guides and documentation in English
+description: Popmundo guides, and how to connect them to AI tools with MCP and llms.txt
 ---
 
-## English guides
+PopMCP publishes Popmundo guides on this site and in formats that AI tools can read directly. There are two ways to reach the guides:
 
-[Music guide](/en/music/introduction-and-indexception)
+- **MCP server:** Tools that support MCP, such as Claude, ChatGPT and code editors, can search the guides and read pages directly.
+- **llms.txt and Markdown:** Any AI tool that can browse the web can read the page index and the Markdown version of every page.
 
-Guides are added separately in each language, using that language’s Popmundo terminology.
+## Explore the guides
+
+- [Music guide](/en/music/introduction-and-indexception): Music career guides in English.
+- [Türkçe rehberler](/tr): Turkish guides.
+
+Guides are written separately in each language, using that language’s Popmundo terminology.
+
+## Connect with MCP
+
+MCP (Model Context Protocol) gives AI tools a standard way to connect to outside sources. The PopMCP server needs no authentication or API key.
+
+| Setting | Value |
+| --- | --- |
+| Server URL | `https://popmundo-mcp.berkbirkan.com/mcp` |
+| Transport | Streamable HTTP |
+| Authentication | None |
+
+### Tools
+
+| Tool | What it does | Parameters |
+| --- | --- | --- |
+| `search` | Searches the guide content. | `query` (required), `limit` (optional, 1–100), `locale` (`tr` or `en`, defaults to `tr`) |
+| `get_page` | Returns the full content of a page. | `path`, for example `/en/music/album` or `/tr/rehberler/tarif-malzemeleri` |
+| `list_pages` | Returns the index of all pages. | None |
+
+When searching English guides, set `locale` to `en`.
+
+### Claude Code
+
+Run this in a terminal:
+
+```sh
+claude mcp add --transport http popmcp https://popmundo-mcp.berkbirkan.com/mcp
+```
+
+Add `--scope user` to use the server in all your projects. Check the connection with `claude mcp get popmcp`. The tools appear in a new session.
+
+### Claude (web and desktop)
+
+1. Open **Settings → Connectors**.
+2. Choose **Add custom connector**.
+3. Enter `PopMCP` as the name and `https://popmundo-mcp.berkbirkan.com/mcp` as the URL.
+
+On Team and Enterprise plans, an organization admin adds custom connectors.
+
+### ChatGPT
+
+Turn on developer mode in ChatGPT settings, then create a new connector with `https://popmundo-mcp.berkbirkan.com/mcp` as the server URL and no authentication. Menu names can differ by plan and version.
+
+### Code editors
+
+For Cursor, add this to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "popmcp": {
+      "url": "https://popmundo-mcp.berkbirkan.com/mcp"
+    }
+  }
+}
+```
+
+For VS Code, add this to `.vscode/mcp.json` in your project:
+
+```json
+{
+  "servers": {
+    "popmcp": {
+      "type": "http",
+      "url": "https://popmundo-mcp.berkbirkan.com/mcp"
+    }
+  }
+}
+```
+
+Other tools that support remote (HTTP) MCP servers can use the same URL.
+
+## Access with llms.txt and Markdown
+
+If your tool does not support MCP, give it one of these URLs. They are plain text files made for AI tools to read.
+
+| URL | Contents |
+| --- | --- |
+| [/llms.txt](/llms.txt) | Index of pages in all languages, with a Markdown link for each page |
+| [/en/llms.txt](/en/llms.txt) | Index of English pages only |
+| [/en/llms-full.txt](/en/llms-full.txt) | Full content of all English guides |
+| [/tr/llms.txt](/tr/llms.txt) | Index of Turkish pages only |
+| [/tr/llms-full.txt](/tr/llms-full.txt) | Full content of all Turkish guides |
+
+Append `.md` to any page URL to get its Markdown version. For example, the Markdown version of `/en/music/album` is at `/en/music/album.md`.
+
+### URL layout
+
+- English pages start with `/en`, Turkish pages with `/tr`.
+- Guides are written separately per language; not every page exists in every language.
+
+### Using chat assistants
+
+Chat assistants such as ChatGPT and Claude usually open only URLs that you write in your message or that appear in search results. Write the full URL in your message:
+
+```text
+Read https://popmundo-mcp.berkbirkan.com/llms.txt and summarize the English music guides.
+```
+
+If the assistant says it cannot reach the site, use the MCP connection instead.
