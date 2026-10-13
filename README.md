@@ -13,6 +13,27 @@ Dosyanın başına `title` ve `description` içeren frontmatter ekleyin.
 Menü sırasını ilgili klasörün `meta.json` dosyasındaki `pages` listesine ekleyin.
 Rehberlerdeki mevcut metinler örnek şablonlardır.
 
+## Dil düzeni
+
+Fumapress'in yerleşik i18n desteğiyle Türkçe varsayılan dildir; Türkçe
+adreslerde dil öneki kullanılmaz. İngilizce sayfalar `/en` altında sunulur.
+Her dilin rehberleri o dilin Popmundo terimleriyle ayrı hazırlanır;
+otomatik çeviri veya başka dilden eksik sayfa gösterimi yoktur
+(`fallbackLanguage: null`).
+
+- Türkçe: `content/rehberler/konu.mdx` → `/rehberler/konu`.
+- İngilizce: `content/rehberler/topic.en.mdx` → `/en/rehberler/topic`.
+- Türkçe menü: `meta.json`; İngilizce menü: `meta.en.json`.
+- Mevcut İngilizce müzik rehberleri: `content/music/*.en.mdx` → `/en/music/...`.
+
+İngilizce sayfa eklerken ilgili klasörün `meta.en.json` dosyasını oluşturun
+ve kökteki `content/meta.en.json` menüsüne klasörü ekleyin.
+Aynı konu farklı dillerde aynı dosya kök adını kullanırsa dil seçici
+bu sayfaları eşleştirir; dil içinde farklı konu adları da kullanılabilir.
+İç bağlantılarda İngilizce adresler için `/en` önekini yazın.
+
+Resmî belge: https://press.fumadocs.dev/docs/internationalization
+
 ## Geliştirme ve doğrulama
 
 Node.js 24 veya üzeri gerekir.
